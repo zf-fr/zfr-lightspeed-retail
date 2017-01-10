@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="./vendor/autoload.php" colors="true">
+    <testsuite name="ZfrLightspeedRetail tests">
+        <directory>./test</directory>
+    </testsuite>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
