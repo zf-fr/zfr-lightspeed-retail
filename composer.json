@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^2.5",
+        "squizlabs/php_codesniffer": "dev-master",
         "zendframework/zend-coding-standard": "^1.0",
         "zendframework/zend-servicemanager": "^3.0",
         "malukenho/docheader": "^0.1.5"
