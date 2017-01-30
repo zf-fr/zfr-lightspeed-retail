@@ -18,6 +18,8 @@
 
 namespace ZfrLightspeedRetail\Exception;
 
+use Exception;
+
 /**
  * @author Daniel Gimenes
  */
@@ -31,8 +33,46 @@ class UnauthorizedException extends RuntimeException
     public static function authorizationCodeRejected(string $authorizationCode): self
     {
         return new self(sprintf(
-            'Authorization code "%s" was rejected by Lightspeed Authorization Server',
+            'Authorization code "%s" was rejected by Lightspeed Authorization Server.',
             $authorizationCode
         ));
+    }
+
+    /**
+     * @return UnauthorizedException
+     */
+    public static function missingReferenceId(): self
+    {
+        return new self(
+            'Missing "referenceID" command param.'
+            . ' This is required to fetch the credentials from credential storage'
+        );
+    }
+
+    /**
+     * @param string $referenceID
+     *
+     * @return UnauthorizedException
+     */
+    public static function missingCredential(string $referenceID): self
+    {
+        return new self(sprintf(
+            'No credential found in credential storage for "%s".',
+            $referenceID
+        ));
+    }
+
+    /**
+     * @param string         $refreshToken
+     * @param Exception|null $exception
+     *
+     * @return UnauthorizedException
+     */
+    public static function refreshTokenRejected(string $refreshToken, Exception $exception = null): self
+    {
+        return new self(sprintf(
+            'The refresh token "%s" was rejected by Lightspeed Authorization Server',
+            $refreshToken
+        ), 0, $exception);
     }
 }
