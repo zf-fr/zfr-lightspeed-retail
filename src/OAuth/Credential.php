@@ -49,8 +49,12 @@ final class Credential
      * @param string $accessToken
      * @param string $refreshToken
      */
-    public function __construct(string $referenceId, int $lightspeedAccountId, string $accessToken, string $refreshToken)
-    {
+    public function __construct(
+        string $referenceId,
+        int $lightspeedAccountId,
+        string $accessToken,
+        string $refreshToken
+    ) {
         $this->referenceId         = $referenceId;
         $this->lightspeedAccountId = $lightspeedAccountId;
         $this->accessToken         = $accessToken;

@@ -33,16 +33,18 @@ use ZfrLightspeedRetail\Exception\InvalidStateException;
 use ZfrLightspeedRetail\Exception\MissingRequiredScopeException;
 use ZfrLightspeedRetail\Exception\UnauthorizedException;
 use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
-use function GuzzleHttp\json_decode;
+use function GuzzleHttp\json_decode as guzzle_json_decode;
 
 /**
  * @author Daniel Gimenes
  */
 final class JwtAuthorizationService implements AuthorizationServiceInterface
 {
+    // @codingStandardsIgnoreStart
     private const LS_ENDPOINT_AUTHORIZE    = 'https://cloud.merchantos.com/oauth/authorize.php?response_type=code&client_id=%s&scope=%s&state=%s';
     private const LS_ENDPOINT_ACCESS_TOKEN = 'https://cloud.merchantos.com/oauth/access_token.php';
     private const LS_ENDPOINT_ACCOUNT      = 'https://api.merchantos.com/API/Account.json';
+    // @codingStandardsIgnoreEnd
 
     /**
      * @var CredentialStorageInterface
@@ -122,7 +124,7 @@ final class JwtAuthorizationService implements AuthorizationServiceInterface
      *
      * @throws InvalidStateException         If the provided state is invalid or expired
      * @throws MissingRequiredScopeException If the granted scope does not satisfy the scope required by your app.
-     * @throws UnauthorizedException         If Lightspeed Retail authorization server rejects the provided authorization code.
+     * @throws UnauthorizedException         If Lightspeed Retail authorization server rejects the provided auth code.
      */
     public function processCallback(string $authorizationCode, string $state): void
     {
@@ -198,7 +200,7 @@ final class JwtAuthorizationService implements AuthorizationServiceInterface
             throw UnauthorizedException::authorizationCodeRejected($authorizationCode);
         }
 
-        return json_decode((string) $response->getBody(), true);
+        return guzzle_json_decode((string) $response->getBody(), true);
     }
 
     /**
@@ -229,7 +231,7 @@ final class JwtAuthorizationService implements AuthorizationServiceInterface
             'headers' => ['Authorization' => sprintf('Bearer %s', $accessToken)],
         ]);
 
-        $result = json_decode((string) $response->getBody(), true);
+        $result = guzzle_json_decode((string) $response->getBody(), true);
 
         return $result['Account']['accountID'];
     }

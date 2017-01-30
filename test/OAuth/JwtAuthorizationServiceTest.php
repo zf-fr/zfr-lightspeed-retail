@@ -35,14 +35,14 @@ use ZfrLightspeedRetail\Exception\UnauthorizedException;
 use ZfrLightspeedRetail\OAuth\AuthorizationServiceInterface;
 use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
 use ZfrLightspeedRetail\OAuth\JwtAuthorizationService;
-use function GuzzleHttp\json_encode;
+use function GuzzleHttp\json_encode as guzzle_json_encode;
 use function GuzzleHttp\Psr7\parse_query;
 use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @author Daniel Gimenes
  */
-final class AthorizationServiceTest extends TestCase
+final class AuthorizationServiceTest extends TestCase
 {
     /**
      * @var ObjectProphecy
@@ -111,13 +111,15 @@ final class AthorizationServiceTest extends TestCase
         $state             = parse_query($authorizationUrl->getQuery(), false)['state'];
 
         // Exchanges code for tokens
-        $this->httpClient->request('POST', 'https://cloud.merchantos.com/oauth/access_token.php', ['json' => [
-            'client_id'     => '123',
-            'client_secret' => 'abc123',
-            'code'          => $authorizationCode,
-            'grant_type'    => 'authorization_code',
-        ]])->shouldBeCalled()->willReturn(
-            new Response(200, [], stream_for(json_encode([
+        $this->httpClient->request('POST', 'https://cloud.merchantos.com/oauth/access_token.php', [
+            'json' => [
+                'client_id'     => '123',
+                'client_secret' => 'abc123',
+                'code'          => $authorizationCode,
+                'grant_type'    => 'authorization_code',
+            ],
+        ])->shouldBeCalled()->willReturn(
+            new Response(200, [], stream_for(guzzle_json_encode([
                 'access_token'  => 'foo',
                 'scope'         => 'employee:inventory employee:reports systemuserid:393608',
                 'refresh_token' => 'bar',
@@ -128,7 +130,7 @@ final class AthorizationServiceTest extends TestCase
         $this->httpClient->request('GET', 'https://api.merchantos.com/API/Account.json', [
             'headers' => ['Authorization' => 'Bearer foo'],
         ])->shouldBeCalled()->willReturn(
-            new Response(200, [], stream_for(json_encode([
+            new Response(200, [], stream_for(guzzle_json_encode([
                 'Account' => ['accountID' => '123456'],
             ])))
         );
@@ -159,16 +161,22 @@ final class AthorizationServiceTest extends TestCase
 
     public function testThrowsExceptionIfRejectAuthCode()
     {
-        $authUrl           = $this->authorizationService->buildAuthorizationUrl('omc-demo.myshopify.com', ['employee:all']);
+        $authUrl = $this->authorizationService->buildAuthorizationUrl(
+            'omc-demo.myshopify.com',
+            ['employee:all']
+        );
+
         $validState        = parse_query($authUrl->getQuery(), false)['state'];
         $authorizationCode = '123456';
 
-        $this->httpClient->request('POST', 'https://cloud.merchantos.com/oauth/access_token.php', ['json' => [
-            'client_id'     => '123',
-            'client_secret' => 'abc123',
-            'code'          => $authorizationCode,
-            'grant_type'    => 'authorization_code',
-        ]])->shouldBeCalled()->willThrow(
+        $this->httpClient->request('POST', 'https://cloud.merchantos.com/oauth/access_token.php', [
+            'json' => [
+                'client_id'     => '123',
+                'client_secret' => 'abc123',
+                'code'          => $authorizationCode,
+                'grant_type'    => 'authorization_code',
+            ],
+        ])->shouldBeCalled()->willThrow(
             new ClientException('Boom!', new Request('GET', 'https://cloud.merchantos.com/oauth/access_token.php'))
         );
 
@@ -189,13 +197,15 @@ final class AthorizationServiceTest extends TestCase
         $authorizationCode = '123456';
 
         // Exchanges code for tokens
-        $this->httpClient->request('POST', 'https://cloud.merchantos.com/oauth/access_token.php', ['json' => [
-            'client_id'     => '123',
-            'client_secret' => 'abc123',
-            'code'          => $authorizationCode,
-            'grant_type'    => 'authorization_code',
-        ]])->shouldBeCalled()->willReturn(
-            new Response(200, [], stream_for(json_encode([
+        $this->httpClient->request('POST', 'https://cloud.merchantos.com/oauth/access_token.php', [
+            'json' => [
+                'client_id'     => '123',
+                'client_secret' => 'abc123',
+                'code'          => $authorizationCode,
+                'grant_type'    => 'authorization_code',
+            ],
+        ])->shouldBeCalled()->willReturn(
+            new Response(200, [], stream_for(guzzle_json_encode([
                 'access_token'  => 'foo',
                 'scope'         => 'employee:inventory systemuserid:393608', // Missing "register" and "reports"
                 'refresh_token' => 'bar',
@@ -214,7 +224,10 @@ final class AthorizationServiceTest extends TestCase
     {
         yield 'Non JWT' => ['foobar'];
         yield 'Undecodable' => ['foo.bar.baz'];
+
+        // @codingStandardsIgnoreStart
         yield 'Expired' => ['eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODU3NTA3MDYsImV4cCI6MTQ4NTc1MTMwNiwidWlkIjoib21jLWRlbW8ubXlzaG9waWZ5LmNvbSIsInNjb3BlIjpbImVtcGxveWVlOmFsbCJdfQ.lIVA_z1_bGHne_ooFJiIzHmwd5dxZ3xi8kDEy7MHfMU'];
+        // @codingStandardsIgnoreEnd
 
         // Create another authorization service to sign with a different key
         $authUrl = (new JwtAuthorizationService(

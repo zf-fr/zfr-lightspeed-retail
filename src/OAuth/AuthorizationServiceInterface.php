@@ -50,7 +50,7 @@ interface AuthorizationServiceInterface
      *
      * @throws InvalidStateException         If the provided state is invalid or expired
      * @throws MissingRequiredScopeException If the granted scope does not satisfy the scope required by your app.
-     * @throws UnauthorizedException         If Lightspeed Retail authorization server rejects the provided authorization code.
+     * @throws UnauthorizedException         If Lightspeed Retail authorization server rejects the provided auth code.
      */
     public function processCallback(string $authorizationCode, string $state): void;
 }
