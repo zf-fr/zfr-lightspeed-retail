@@ -20,9 +20,11 @@ namespace ZfrLightspeedRetailTest;
 
 use GuzzleHttp\Command\Command;
 use GuzzleHttp\Command\Result;
+use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ZfrLightspeedRetail\LightspeedRetailClient;
+use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
 use ZfrLightspeedRetailTest\TestAsset\ServiceClientInterface;
 
 /**
@@ -30,6 +32,26 @@ use ZfrLightspeedRetailTest\TestAsset\ServiceClientInterface;
  */
 final class LightspeedRetailClientTest extends TestCase
 {
+    public function testCreatesFromDefaults()
+    {
+        $storage = $this->prophesize(CredentialStorageInterface::class);
+
+        LightspeedRetailClient::fromDefaults($storage->reveal(), [
+            'client_id'     => 'foo',
+            'client_secret' => 'bar',
+        ]);
+    }
+
+    public function testThrowsExceptionIfMissingRequiredConfig()
+    {
+        $storage = $this->prophesize(CredentialStorageInterface::class);
+
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Missing "client_id" and "client_secret" config for ZfrLightspeedRetail');
+
+        LightspeedRetailClient::fromDefaults($storage->reveal(), []);
+    }
+
     public function testForwardsMagicMethodCalls()
     {
         $serviceClient  = $this->prophesize(ServiceClientInterface::class);

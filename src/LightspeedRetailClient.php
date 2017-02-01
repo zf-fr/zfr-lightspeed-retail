@@ -18,11 +18,20 @@
 
 namespace ZfrLightspeedRetail;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Command\CommandInterface;
+use GuzzleHttp\Command\Guzzle\Description;
+use GuzzleHttp\Command\Guzzle\Deserializer as GuzzleDeserializer;
+use GuzzleHttp\Command\Guzzle\GuzzleClient;
 use GuzzleHttp\Command\ResultInterface;
 use GuzzleHttp\Command\ServiceClientInterface;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use OutOfBoundsException;
 use Psr\Http\Message\ResponseInterface;
 use Traversable;
+use ZfrLightspeedRetail\OAuth\AuthorizationMiddleware;
+use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
 
 /**
  * HTTP Client used to interact with the Lightspeed Retail API
@@ -65,6 +74,50 @@ class LightspeedRetailClient
     public function __construct(ServiceClientInterface $serviceClient)
     {
         $this->serviceClient = $serviceClient;
+    }
+
+    /**
+     * @param CredentialStorageInterface $credentialStorage
+     * @param array                      $config
+     *
+     * @return LightspeedRetailClient
+     */
+    public static function fromDefaults(CredentialStorageInterface $credentialStorage, array $config): self
+    {
+        if (empty($config['client_id']) || empty($config['client_secret'])) {
+            throw new OutOfBoundsException(
+                'Missing "client_id" and "client_secret" config for ZfrLightspeedRetail'
+            );
+        }
+
+        $handlerStack = HandlerStack::create();
+
+        // Push middleware to retry requests when decided by RetryDecider
+        $handlerStack->push(Middleware::retry(
+            new RetryDecider($config['max_retries'] ?? 10)
+        ));
+
+        $httpClient   = new Client(['handler' => $handlerStack]);
+        $description  = new Description(require __DIR__ . '/ServiceDescription/Lightspeed-Retail-2016.25.php');
+        $deserializer = new Deserializer(new GuzzleDeserializer($description, true), $description);
+        $clientConfig = [];
+
+        // If a default reference ID is provided in config, we add it as default command param
+        if (! empty($config['reference_id'])) {
+            $clientConfig['defaults']['referenceID'] = $config['reference_id'];
+        }
+
+        $serviceClient = new GuzzleClient($httpClient, $description, null, $deserializer, null, $clientConfig);
+
+        // Push middleware to authorize requests
+        $serviceClient->getHandlerStack()->push(AuthorizationMiddleware::wrapped(
+            $credentialStorage,
+            $httpClient,
+            $config['client_id'],
+            $config['client_secret']
+        ));
+
+        return new self($serviceClient);
     }
 
     /**
