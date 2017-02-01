@@ -99,7 +99,7 @@ final class Credential
      *
      * @return Credential
      */
-    public function withRefreshedTokens(string $accessToken, string $refreshToken): self
+    public function withTokens(string $accessToken, string $refreshToken): self
     {
         $clone = clone $this;
 

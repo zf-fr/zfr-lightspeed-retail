@@ -181,7 +181,7 @@ final class AuthorizationMiddleware
         }
 
         $result     = guzzle_json_decode((string) $response->getBody(), true);
-        $credential = $credential->withRefreshedTokens($result['access_token'], $result['refresh_token']);
+        $credential = $credential->withTokens($result['access_token'], $result['refresh_token']);
 
         $this->credentialStorage->save($credential);
 
