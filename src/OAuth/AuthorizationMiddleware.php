@@ -144,7 +144,6 @@ final class AuthorizationMiddleware
 
     /**
      * @param CommandInterface $command
-     *
      * @param Credential       $credential
      *
      * @return CommandInterface
