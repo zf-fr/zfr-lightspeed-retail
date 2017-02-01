@@ -1,0 +1,118 @@
+<?php
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the MIT license.
+ */
+
+namespace ZfrLightspeedRetail;
+
+use GuzzleHttp\Command\CommandInterface;
+use GuzzleHttp\Command\ResultInterface;
+use GuzzleHttp\Command\ServiceClientInterface;
+use Psr\Http\Message\ResponseInterface;
+use Traversable;
+
+/**
+ * HTTP Client used to interact with the Lightspeed Retail API
+ *
+ * @author Daniel Gimenes
+ * @author Michaël Gallego
+ *
+ * CUSTOMER RELATED METHODS:
+ *
+ * @method array getCustomers(array $args = [])
+ * @method array createCustomer(array $args = [])
+ * @method array updateCustomer(array $args = [])
+ *
+ * ITEM RELATED METHODS:
+ *
+ * @method array getItems(array $args = [])
+ * @method array createItem(array $args = [])
+ * @method array updateItem(array $args = [])
+ *
+ * SALE RELATED METHODS:
+ *
+ * @method array getSales(array $args = [])
+ *
+ * ITERATOR METHODS:
+ *
+ * @method Traversable getSalesIterator(array $args = [])
+ */
+class LightspeedRetailClient
+{
+    /**
+     * @var ServiceClientInterface
+     */
+    private $serviceClient;
+
+    /**
+     * @param ServiceClientInterface $serviceClient
+     */
+    public function __construct(ServiceClientInterface $serviceClient)
+    {
+        $this->serviceClient = $serviceClient;
+    }
+
+    /**
+     * Directly call a specific endpoint by creating the command and executing it
+     *
+     * Using __call magic methods is equivalent to creating and executing a single command.
+     * It also supports using optimized iterator requests by adding "Iterator" suffix to the command
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return ResponseInterface|ResultInterface|Traversable
+     */
+    public function __call(string $method, array $args = [])
+    {
+        $params = $args[0] ?? [];
+
+        // Allow magic method calls for iterators
+        // (e.g. $client->getSalesIterator($internalAccountId, $params))
+        if (substr($method, -8) === 'Iterator') {
+            $command = $this->serviceClient->getCommand(substr($method, 0, -8), $params);
+
+            return $this->iterateResources($command);
+        }
+
+        return $this->serviceClient->$method($params);
+    }
+
+    /**
+     * @param CommandInterface $command
+     *
+     * @return Traversable
+     */
+    private function iterateResources(CommandInterface $command): Traversable
+    {
+        // When using the iterator, we force the maximum number of items per page to 100,
+        // and we init the offset to 0 to start from start
+        $command['limit']  = 100;
+        $command['offset'] = 0;
+
+        do {
+            $result = $this->serviceClient->execute($command);
+
+            foreach ($result as $item) {
+                yield $item;
+            }
+
+            // Create command to next page
+            $command           = clone $command;
+            $command['offset'] += 100;
+        } while (count($result) >= 100);
+    }
+}
