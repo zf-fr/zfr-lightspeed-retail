@@ -92,4 +92,20 @@ final class Credential
     {
         return $this->refreshToken;
     }
+
+    /**
+     * @param string $accessToken
+     * @param string $refreshToken
+     *
+     * @return Credential
+     */
+    public function withTokens(string $accessToken, string $refreshToken): self
+    {
+        $clone = clone $this;
+
+        $clone->accessToken  = $accessToken;
+        $clone->refreshToken = $refreshToken;
+
+        return $clone;
+    }
 }
