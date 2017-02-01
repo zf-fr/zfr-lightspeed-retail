@@ -48,6 +48,8 @@ use Traversable;
  *
  * ITERATOR METHODS:
  *
+ * @method Traversable getCustomersIterator(array $args = [])
+ * @method Traversable getItemsIterator(array $args = [])
  * @method Traversable getSalesIterator(array $args = [])
  */
 class LightspeedRetailClient
