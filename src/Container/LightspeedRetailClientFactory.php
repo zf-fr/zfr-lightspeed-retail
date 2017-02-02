@@ -16,20 +16,28 @@
  * and is licensed under the MIT license.
  */
 
-use ZfrLightspeedRetail\Container\JwtAuthorizationServiceFactory;
-use ZfrLightspeedRetail\LightspeedRetailClient;
-use ZfrLightspeedRetail\OAuth\AuthorizationServiceInterface;
-use ZfrLightspeedRetail\OAuth\JwtAuthorizationService;
-use ZfrLightspeedRetailTest\Container\LightspeedRetailClientFactoryTest;
+namespace ZfrLightspeedRetail\Container;
 
-return [
-    'dependencies' => [
-        'aliases' => [
-            AuthorizationServiceInterface::class => JwtAuthorizationService::class,
-        ],
-        'factories' => [
-            JwtAuthorizationService::class => JwtAuthorizationServiceFactory::class,
-            LightspeedRetailClient::class  => LightspeedRetailClientFactoryTest::class,
-        ],
-    ],
-];
+use Interop\Container\ContainerInterface;
+use ZfrLightspeedRetail\LightspeedRetailClient;
+use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
+
+/**
+ * @author Daniel Gimenes
+ */
+final class LightspeedRetailClientFactory
+{
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return LightspeedRetailClient
+     */
+    public function __invoke(ContainerInterface $container): LightspeedRetailClient
+    {
+        $config  = $container->get('config') ?? [];
+        $config  = $config['zfr_lightspeed_retail'] ?? [];
+        $storage = $container->get(CredentialStorageInterface::class);
+
+        return LightspeedRetailClient::fromDefaults($storage, $config);
+    }
+}
