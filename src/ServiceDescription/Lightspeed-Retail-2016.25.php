@@ -69,9 +69,9 @@ return [
                     'type'     => 'string',
                     'required' => false,
                 ],
-                'additionalProperties' => [
-                    'location' => 'query',
-                ],
+            ],
+            'additionalProperties' => [
+                'location' => 'query',
             ],
         ],
 
@@ -199,9 +199,9 @@ return [
                     'type'     => 'string',
                     'required' => false,
                 ],
-                'additionalProperties' => [
-                    'location' => 'query',
-                ],
+            ],
+            'additionalProperties' => [
+                'location' => 'query',
             ],
         ],
 
@@ -314,9 +314,9 @@ return [
                     'type'     => 'string',
                     'required' => false,
                 ],
-                'additionalProperties' => [
-                    'location' => 'query',
-                ],
+            ],
+            'additionalProperties' => [
+                'location' => 'query',
             ],
         ],
     ],
