@@ -28,8 +28,8 @@ return [
             AuthorizationServiceInterface::class => JwtAuthorizationService::class,
         ],
         'factories' => [
-            LightspeedRetailClient::class  => LightspeedRetailClientFactoryTest::class,
             JwtAuthorizationService::class => JwtAuthorizationServiceFactory::class,
+            LightspeedRetailClient::class  => LightspeedRetailClientFactoryTest::class,
         ],
     ],
 ];
