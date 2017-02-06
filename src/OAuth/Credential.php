@@ -62,6 +62,34 @@ final class Credential
     }
 
     /**
+     * @param array $data
+     *
+     * @return Credential
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['reference_id'],
+            $data['lightspeed_account_id'],
+            $data['access_token'],
+            $data['refresh_token']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'reference_id'          => $this->referenceId,
+            'lightspeed_account_id' => $this->lightspeedAccountId,
+            'access_token'          => $this->accessToken,
+            'refresh_token'         => $this->refreshToken,
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getReferenceId(): string

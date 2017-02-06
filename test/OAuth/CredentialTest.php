@@ -10,6 +10,18 @@ use ZfrLightspeedRetail\OAuth\Credential;
  */
 final class CredentialTest extends TestCase
 {
+    public function testIsArraySerializable()
+    {
+        $data = [
+            'reference_id'          => 'test',
+            'lightspeed_account_id' => 1234567890,
+            'access_token'          => 'foo',
+            'refresh_token'         => 'bar',
+        ];
+
+        $this->assertSame($data, Credential::fromArray($data)->toArray());
+    }
+
     public function testCreatesAnotherWithDifferentAccessToken()
     {
         $a = Credential::fromArray([
