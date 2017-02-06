@@ -95,16 +95,14 @@ final class Credential
 
     /**
      * @param string $accessToken
-     * @param string $refreshToken
      *
      * @return Credential
      */
-    public function withTokens(string $accessToken, string $refreshToken): self
+    public function withAccessToken(string $accessToken): self
     {
         $clone = clone $this;
 
-        $clone->accessToken  = $accessToken;
-        $clone->refreshToken = $refreshToken;
+        $clone->accessToken = $accessToken;
 
         return $clone;
     }

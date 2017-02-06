@@ -125,8 +125,7 @@ final class AuthorizationMiddlewareTest extends TestCase
             ],
         ])->shouldBeCalled()->willReturn(
             new Response(200, [], stream_for(guzzle_json_encode([
-                'access_token'  => 'valid',
-                'refresh_token' => 'bar',
+                'access_token' => 'valid'
             ])))
         );
 
@@ -139,7 +138,6 @@ final class AuthorizationMiddlewareTest extends TestCase
         $refreshedCredential = $credentialStorage->get($referenceId);
 
         $this->assertSame('valid', $refreshedCredential->getAccessToken());
-        $this->assertSame('bar', $refreshedCredential->getRefreshToken());
     }
 
     public function testThrowsExceptionIfRejectedRefreshToken()
