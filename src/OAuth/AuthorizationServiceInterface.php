@@ -52,5 +52,5 @@ interface AuthorizationServiceInterface
      * @throws MissingRequiredScopeException If the granted scope does not satisfy the scope required by your app.
      * @throws UnauthorizedException         If Lightspeed Retail authorization server rejects the provided auth code.
      */
-    public function processCallback(string $authorizationCode, string $state): void;
+    public function processCallback(string $authorizationCode, string $state);
 }
