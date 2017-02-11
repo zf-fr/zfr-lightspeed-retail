@@ -17,10 +17,10 @@
  */
 
 use ZfrLightspeedRetail\Container\JwtAuthorizationServiceFactory;
+use ZfrLightspeedRetail\Container\LightspeedRetailClientFactory;
 use ZfrLightspeedRetail\LightspeedRetailClient;
 use ZfrLightspeedRetail\OAuth\AuthorizationServiceInterface;
 use ZfrLightspeedRetail\OAuth\JwtAuthorizationService;
-use ZfrLightspeedRetailTest\Container\LightspeedRetailClientFactoryTest;
 
 return [
     'dependencies' => [
@@ -29,7 +29,7 @@ return [
         ],
         'factories' => [
             JwtAuthorizationService::class => JwtAuthorizationServiceFactory::class,
-            LightspeedRetailClient::class  => LightspeedRetailClientFactoryTest::class,
+            LightspeedRetailClient::class  => LightspeedRetailClientFactory::class,
         ],
     ],
 ];
