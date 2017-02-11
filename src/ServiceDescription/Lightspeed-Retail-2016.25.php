@@ -60,9 +60,8 @@ return [
                 ],
                 'load_relations' => [
                     'location' => 'query',
-                    'type'     => 'array',
+                    'type'     => 'string',
                     'required' => false,
-                    'filters'  => ['json_encode'],
                 ],
                 'orderby' => [
                     'location' => 'query',
@@ -190,9 +189,8 @@ return [
                 ],
                 'load_relations' => [
                     'location' => 'query',
-                    'type'     => 'array',
+                    'type'     => 'string',
                     'required' => false,
-                    'filters'  => ['json_encode'],
                 ],
                 'orderby' => [
                     'location' => 'query',
@@ -305,9 +303,8 @@ return [
                 ],
                 'load_relations' => [
                     'location' => 'query',
-                    'type'     => 'array',
+                    'type'     => 'string',
                     'required' => false,
-                    'filters'  => ['json_encode'],
                 ],
                 'orderby' => [
                     'location' => 'query',
