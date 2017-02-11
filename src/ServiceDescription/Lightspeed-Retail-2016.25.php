@@ -60,7 +60,7 @@ return [
                 ],
                 'load_relations' => [
                     'location' => 'query',
-                    'type'     => 'array',
+                    'type'     => 'string',
                     'required' => false,
                     'filters'  => ['json_encode'],
                 ],
@@ -190,7 +190,7 @@ return [
                 ],
                 'load_relations' => [
                     'location' => 'query',
-                    'type'     => 'array',
+                    'type'     => 'string',
                     'required' => false,
                     'filters'  => ['json_encode'],
                 ],
@@ -305,7 +305,7 @@ return [
                 ],
                 'load_relations' => [
                     'location' => 'query',
-                    'type'     => 'array',
+                    'type'     => 'string',
                     'required' => false,
                     'filters'  => ['json_encode'],
                 ],
