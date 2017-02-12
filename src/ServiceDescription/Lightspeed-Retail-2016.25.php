@@ -38,6 +38,11 @@ return [
                 'root_key' => 'Customer',
             ],
             'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => false,
+                ],
                 'limit' => [
                     'location' => 'query',
                     'required' => false,
@@ -167,6 +172,11 @@ return [
                 'root_key' => 'Item',
             ],
             'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => false,
+                ],
                 'limit' => [
                     'location' => 'query',
                     'required' => false,
@@ -211,6 +221,11 @@ return [
                 'root_key' => 'Item',
             ],
             'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => false,
+                ],
                 'description' => [
                     'location' => 'json',
                     'type'     => 'string',
@@ -242,6 +257,11 @@ return [
                 'root_key' => 'Item',
             ],
             'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => false,
+                ],
                 'description' => [
                     'location' => 'json',
                     'type'     => 'string',
@@ -281,6 +301,11 @@ return [
                 'root_key' => 'Item',
             ],
             'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => false,
+                ],
                 'limit' => [
                     'location' => 'query',
                     'required' => false,
