@@ -23,6 +23,8 @@ use GuzzleHttp\Command\CommandInterface;
 use GuzzleHttp\Command\Guzzle\Description;
 use GuzzleHttp\Command\Guzzle\Deserializer as GuzzleDeserializer;
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
+use GuzzleHttp\Command\Guzzle\RequestLocation\QueryLocation;
+use GuzzleHttp\Command\Guzzle\Serializer;
 use GuzzleHttp\Command\ResultInterface;
 use GuzzleHttp\Command\ServiceClientInterface;
 use GuzzleHttp\HandlerStack;
@@ -99,6 +101,7 @@ class LightspeedRetailClient
 
         $httpClient   = new Client(['handler' => $handlerStack]);
         $description  = new Description(require __DIR__ . '/ServiceDescription/Lightspeed-Retail-2016.25.php');
+        $serializer   = new Serializer($description, ['query' => new QueryLocation('query', new QuerySerializer())]);
         $deserializer = new Deserializer(new GuzzleDeserializer($description, true), $description);
         $clientConfig = [];
 
@@ -107,7 +110,7 @@ class LightspeedRetailClient
             $clientConfig['defaults']['referenceID'] = $config['reference_id'];
         }
 
-        $serviceClient = new GuzzleClient($httpClient, $description, null, $deserializer, null, $clientConfig);
+        $serviceClient = new GuzzleClient($httpClient, $description, $serializer, $deserializer, null, $clientConfig);
 
         // Push middleware to authorize requests
         $serviceClient->getHandlerStack()->push(AuthorizationMiddleware::wrapped(
