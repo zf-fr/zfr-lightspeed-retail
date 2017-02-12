@@ -62,6 +62,7 @@ return [
                     'location' => 'query',
                     'type'     => 'string',
                     'required' => false,
+                    'filters'  => ['json_encode'],
                 ],
                 'orderby' => [
                     'location' => 'query',
@@ -191,6 +192,7 @@ return [
                     'location' => 'query',
                     'type'     => 'string',
                     'required' => false,
+                    'filters'  => ['json_encode'],
                 ],
                 'orderby' => [
                     'location' => 'query',
@@ -305,6 +307,7 @@ return [
                     'location' => 'query',
                     'type'     => 'string',
                     'required' => false,
+                    'filters'  => ['json_encode'],
                 ],
                 'orderby' => [
                     'location' => 'query',
