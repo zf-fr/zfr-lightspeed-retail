@@ -99,9 +99,11 @@ class LightspeedRetailClient
             new RetryDecider($config['max_retries'] ?? 10)
         ));
 
-        $httpClient   = new Client(['handler' => $handlerStack]);
-        $description  = new Description(require __DIR__ . '/ServiceDescription/Lightspeed-Retail-2016.25.php');
-        $serializer   = new Serializer($description, ['query' => new QueryLocation('query', new LightspeedQuerySerializer())]);
+        $httpClient  = new Client(['handler' => $handlerStack]);
+        $description = new Description(require __DIR__ . '/ServiceDescription/Lightspeed-Retail-2016.25.php');
+        $serializer  = new Serializer($description, [
+            'query' => new QueryLocation('query', new LightspeedQuerySerializer()),
+        ]);
         $deserializer = new Deserializer(new GuzzleDeserializer($description, true), $description);
         $clientConfig = [];
 
