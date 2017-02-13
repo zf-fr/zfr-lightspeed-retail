@@ -155,6 +155,9 @@ final class AuthorizationMiddleware
             'headers' => ['Authorization' => 'Bearer ' . $credential->getAccessToken()],
         ];
 
+        // Remove internal referenceID param from command
+        unset($command['referenceID']);
+
         return $command;
     }
 
