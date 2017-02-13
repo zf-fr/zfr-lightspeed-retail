@@ -74,7 +74,7 @@ return [
                     'required' => false,
                 ],
             ],
-            'additionalProperties' => [
+            'additionalParameters' => [
                 'location' => 'query',
             ],
         ],
@@ -208,7 +208,7 @@ return [
                     'required' => false,
                 ],
             ],
-            'additionalProperties' => [
+            'additionalParameters' => [
                 'location' => 'query',
             ],
         ],
@@ -337,7 +337,7 @@ return [
                     'required' => false,
                 ],
             ],
-            'additionalProperties' => [
+            'additionalParameters' => [
                 'location' => 'query',
             ],
         ],

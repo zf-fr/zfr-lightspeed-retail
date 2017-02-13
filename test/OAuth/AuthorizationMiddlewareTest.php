@@ -63,9 +63,11 @@ final class AuthorizationMiddlewareTest extends TestCase
 
         $httpClient->request(Argument::any())->shouldNotBeCalled();
 
-        $result = $middleware(new Command('Test', ['referenceID' => $referenceId]))->wait();
+        $command = new Command('Test', ['referenceID' => $referenceId]);
+        $result  = $middleware($command)->wait();
 
         $this->assertSame('success', $result['message']);
+        $this->assertArrayNotHasKey('referenceID', $command);
     }
 
     public function testForwardsNon401Errors()
