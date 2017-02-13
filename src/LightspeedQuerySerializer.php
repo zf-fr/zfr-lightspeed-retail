@@ -24,7 +24,7 @@ use function GuzzleHttp\Psr7\build_query;
 /**
  * @author Daniel Gimenes
  */
-final class QuerySerializer implements QuerySerializerInterface
+final class LightspeedQuerySerializer implements QuerySerializerInterface
 {
     /**
      * Aggregate query params and transform them into a string

@@ -19,16 +19,16 @@
 namespace ZfrLightspeedRetailTest;
 
 use PHPUnit\Framework\TestCase;
-use ZfrLightspeedRetail\QuerySerializer;
+use ZfrLightspeedRetail\LightspeedQuerySerializer;
 
 /**
  * @author Daniel Gimenes
  */
-final class QuerySerializerTest extends TestCase
+final class LightspeedQuerySerializerTest extends TestCase
 {
     public function testSerializesQueryStringWithoutEncoding()
     {
-        $querySerializer = new QuerySerializer();
+        $querySerializer = new LightspeedQuerySerializer();
 
         $this->assertSame(
             'load_relations=["Customer"]',
