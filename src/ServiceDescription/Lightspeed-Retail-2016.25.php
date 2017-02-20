@@ -298,7 +298,7 @@ return [
             'uri'           => 'Account/{accountID}/Sale.json',
             'responseModel' => 'GenericModel',
             'data'          => [
-                'root_key' => 'Item',
+                'root_key' => 'Sale',
             ],
             'parameters' => [
                 'accountID' => [
