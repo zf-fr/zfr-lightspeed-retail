@@ -24,6 +24,7 @@ use GuzzleHttp\Command\Exception\CommandException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
+use Throwable;
 use ZfrLightspeedRetail\Exception\UnauthorizedException;
 use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
 use function GuzzleHttp\json_decode as guzzle_json_decode;
@@ -126,12 +127,17 @@ final class AuthorizationMiddleware
         $promise = ($this->nextHandler)($command);
 
         // If authentication fails, we refresh the token and try again
-        return $promise->otherwise(function (CommandException $exception) use ($command, $credential) {
-            $response = $exception->getResponse();
+        return $promise->otherwise(function (Throwable $e) use ($command, $credential) {
+            // Handle only command exceptions
+            if (! $e instanceof CommandException) {
+                throw $e;
+            }
+
+            $response = $e->getResponse();
 
             // Forward non 401 errors
             if (null === $response || 401 !== $response->getStatusCode()) {
-                throw $exception;
+                throw $e;
             }
 
             $credential = $this->refreshToken($credential);
