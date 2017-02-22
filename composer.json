@@ -54,7 +54,8 @@
     "scripts": {
         "check": [
             "@cs-check",
-            "@test"
+            "@test",
+            "@license-check"
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
