@@ -66,24 +66,24 @@ final class Deserializer
             return $result;
         }
 
-        return $this->unwrapResult($result, $command);
-    }
+        $operation    = $this->serviceDescription->getOperation($command->getName());
+        $rootKey      = $operation->getData('root_key');
+        $isCollection = $operation->getData('is_collection');
 
-    /**
-     * In Lightspeed Retail API, all responses wrap the data by the resource name.
-     * For instance, using the customers endpoint will wrap the data by the "Customer" key.
-     * This is a bit inconvenient to use in userland. As a consequence, we always "unwrap" the result.
-     *
-     * @param ResultInterface  $result
-     * @param CommandInterface $command
-     *
-     * @return ResultInterface
-     */
-    private function unwrapResult(ResultInterface $result, CommandInterface $command): ResultInterface
-    {
-        $operation = $this->serviceDescription->getOperation($command->getName());
-        $rootKey   = $operation->getData('root_key');
+        // In Lightspeed Retail API, all responses wrap the data by the resource name.
+        // For instance, using the customers endpoint will wrap the data by the "Customer" key.
+        // This is a bit inconvenient to use in userland. As a consequence, we always "unwrap" the result.
+        if (null !== $rootKey) {
+            $result = new Result($result[$rootKey] ?? []);
+        }
 
-        return (null === $rootKey) ? $result : new Result($result[$rootKey] ?? []);
+        // When a collection contains a single item in Lightspeed,
+        // they return the item directly instead of an array containing a single item.
+        // In these cases we "wrap" the item in an array to make sure that collections are always arrays of items.
+        if (true === $isCollection) {
+            $result = new Result(Filter::normalizeCollection($result->toArray()));
+        }
+
+        return $result;
     }
 }

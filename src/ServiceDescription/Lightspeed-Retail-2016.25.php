@@ -35,7 +35,8 @@ return [
             'uri'           => 'Account/{accountID}/Customer.json',
             'responseModel' => 'GenericModel',
             'data'          => [
-                'root_key' => 'Customer',
+                'root_key'      => 'Customer',
+                'is_collection' => true,
             ],
             'parameters' => [
                 'accountID' => [
@@ -169,7 +170,8 @@ return [
             'uri'           => 'Account/{accountID}/Item.json',
             'responseModel' => 'GenericModel',
             'data'          => [
-                'root_key' => 'Item',
+                'root_key'      => 'Item',
+                'is_collection' => true,
             ],
             'parameters' => [
                 'accountID' => [
@@ -298,7 +300,8 @@ return [
             'uri'           => 'Account/{accountID}/Sale.json',
             'responseModel' => 'GenericModel',
             'data'          => [
-                'root_key' => 'Sale',
+                'root_key'      => 'Sale',
+                'is_collection' => true,
             ],
             'parameters' => [
                 'accountID' => [
