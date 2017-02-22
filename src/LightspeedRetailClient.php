@@ -41,19 +41,19 @@ use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
  *
  * CUSTOMER RELATED METHODS:
  *
- * @method array getCustomers(array $args = [])
- * @method array createCustomer(array $args = [])
- * @method array updateCustomer(array $args = [])
+ * @method ResultInterface getCustomers(array $args = [])
+ * @method ResultInterface createCustomer(array $args = [])
+ * @method ResultInterface updateCustomer(array $args = [])
  *
  * ITEM RELATED METHODS:
  *
- * @method array getItems(array $args = [])
- * @method array createItem(array $args = [])
- * @method array updateItem(array $args = [])
+ * @method ResultInterface getItems(array $args = [])
+ * @method ResultInterface createItem(array $args = [])
+ * @method ResultInterface updateItem(array $args = [])
  *
  * SALE RELATED METHODS:
  *
- * @method array getSales(array $args = [])
+ * @method ResultInterface getSales(array $args = [])
  *
  * ITERATOR METHODS:
  *
