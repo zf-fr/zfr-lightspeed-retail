@@ -30,6 +30,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use RuntimeException;
 use ZfrLightspeedRetail\Exception\UnauthorizedException;
 use ZfrLightspeedRetail\OAuth\AuthorizationMiddleware;
 use ZfrLightspeedRetail\OAuth\Credential;
@@ -68,6 +69,33 @@ final class AuthorizationMiddlewareTest extends TestCase
 
         $this->assertSame('success', $result['message']);
         $this->assertArrayNotHasKey('referenceID', $command);
+    }
+
+    public function testForwardsNonCommandException()
+    {
+        $referenceId = 'omc-demo.myshopify.com';
+
+        // Initialize storage with valid access token
+        $credentialStorage = new InMemoryCredentialStorage([
+            $referenceId => new Credential($referenceId, 123456, 'valid', 'foo')
+        ]);
+
+        $httpClient = $this->prophesize(ClientInterface::class);
+        $middleware = new AuthorizationMiddleware(
+            $this->createNextHandler(),
+            $credentialStorage,
+            $httpClient->reveal(),
+            '123456',
+            'foobar'
+        );
+
+        $httpClient->request(Argument::any())->shouldNotBeCalled();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Booom!');
+
+        // Command named "Invalid" throws RuntimeException
+        $middleware(new Command('Invalid', ['referenceID' => $referenceId]))->wait();
     }
 
     public function testForwardsNon401Errors()
@@ -249,6 +277,11 @@ final class AuthorizationMiddlewareTest extends TestCase
                     null,
                     new Response(401)
                 ));
+            }
+
+            // Throws RuntimeException if command named "Invalid"
+            if ('Invalid' === $command->getName()) {
+                return new RejectedPromise(new RuntimeException('Booom!'));
             }
 
             // Returns 404 if command named "NonExisting"
