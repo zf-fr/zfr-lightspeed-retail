@@ -80,6 +80,35 @@ return [
             ],
         ],
 
+        'GetCustomer' => [
+            'httpMethod'    => 'GET',
+            'uri'           => 'Account/{accountID}/Customer/{customerID}.json',
+            'responseModel' => 'GenericModel',
+            'data'          => [
+                'root_key' => 'Customer',
+            ],
+            'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
+                ],
+                'customerID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
+                ],
+                'load_relations' => [
+                    'location' => 'query',
+                    'type'     => 'string',
+                    'required' => false,
+                ],
+            ],
+            'additionalParameters' => [
+                'location' => 'query',
+            ],
+        ],
+
         'CreateCustomer' => [
             'httpMethod'    => 'POST',
             'uri'           => 'Account/{accountID}/Customer.json',
