@@ -42,6 +42,7 @@ use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
  * CUSTOMER RELATED METHODS:
  *
  * @method ResultInterface getCustomers(array $args = [])
+ * @method ResultInterface getCustomer(array $args = [])
  * @method ResultInterface createCustomer(array $args = [])
  * @method ResultInterface updateCustomer(array $args = [])
  *
