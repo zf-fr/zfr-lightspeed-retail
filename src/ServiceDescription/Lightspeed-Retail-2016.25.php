@@ -373,6 +373,72 @@ return [
                 'location' => 'query',
             ],
         ],
+
+        'GetSale' => [
+            'httpMethod'    => 'GET',
+            'uri'           => 'Account/{accountID}/Sale/{saleID}.json',
+            'responseModel' => 'GenericModel',
+            'data'          => [
+                'root_key' => 'Sale',
+            ],
+            'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
+                ],
+                'saleID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
+                ],
+                'load_relations' => [
+                    'location' => 'query',
+                    'type'     => 'string',
+                    'required' => false,
+                ],
+            ],
+            'additionalParameters' => [
+                'location' => 'query',
+            ],
+        ],
+
+        /**
+         * --------------------------------------------------------------------------------
+         * SALE LINE RELATED METHODS
+         *
+         * DOC: http://developers.lightspeedhq.com/retail/endpoints/Account-SaleLine/
+         * --------------------------------------------------------------------------------
+         */
+
+        'GetSaleLine' => [
+            'httpMethod'    => 'GET',
+            'uri'           => 'Account/{accountID}/SaleLine/{saleLineID}.json',
+            'responseModel' => 'GenericModel',
+            'data'          => [
+                'root_key' => 'Sale',
+            ],
+            'parameters' => [
+                'accountID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
+                ],
+                'saleLineID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
+                ],
+                'load_relations' => [
+                    'location' => 'query',
+                    'type'     => 'string',
+                    'required' => false,
+                ],
+            ],
+            'additionalParameters' => [
+                'location' => 'query',
+            ],
+        ],
     ],
 
     'models' => [
