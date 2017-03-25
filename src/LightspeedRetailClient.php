@@ -55,6 +55,11 @@ use ZfrLightspeedRetail\OAuth\CredentialStorage\CredentialStorageInterface;
  * SALE RELATED METHODS:
  *
  * @method ResultInterface getSales(array $args = [])
+ * @method ResultInterface getSale(array $args = [])
+ *
+ * SALE LINE RELATED METHODS:
+ *
+ * @method ResultInterface getSaleLine(array $args = [])
  *
  * ITERATOR METHODS:
  *

@@ -93,7 +93,7 @@ final class AuthorizationServiceTest extends TestCase
         $state = (new Parser())->parse($query['state']);
 
         $this->assertFalse($state->isExpired());
-        $this->assertTrue($state->isExpired(new DateTimeImmutable('+ 10 minutes')));
+        $this->assertTrue($state->isExpired(new DateTimeImmutable('+ 11 minutes')));
         $this->assertTrue($state->verify(new Sha256(), 'abc123'));
         $this->assertSame($referenceId, $state->getClaim('uid'));
         $this->assertSame($requestedScope, $state->getClaim('scope'));
