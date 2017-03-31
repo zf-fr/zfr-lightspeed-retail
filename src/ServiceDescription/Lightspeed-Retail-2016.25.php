@@ -291,7 +291,12 @@ return [
                 'accountID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => false,
+                    'required' => true,
+                ],
+                'itemID' => [
+                    'location' => 'uri',
+                    'type'     => 'integer',
+                    'required' => true,
                 ],
                 'description' => [
                     'location' => 'json',
