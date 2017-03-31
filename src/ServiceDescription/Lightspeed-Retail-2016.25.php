@@ -291,12 +291,12 @@ return [
                 'accountID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'itemID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'description' => [
                     'location' => 'json',
