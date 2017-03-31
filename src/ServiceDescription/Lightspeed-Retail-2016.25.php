@@ -91,12 +91,12 @@ return [
                 'accountID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'customerID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'load_relations' => [
                     'location' => 'query',
@@ -161,7 +161,7 @@ return [
                 'customerID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'firstName' => [
                     'location' => 'json',
@@ -390,12 +390,12 @@ return [
                 'accountID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'saleID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'load_relations' => [
                     'location' => 'query',
@@ -427,12 +427,12 @@ return [
                 'accountID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'saleLineID' => [
                     'location' => 'uri',
                     'type'     => 'integer',
-                    'required' => true,
+                    'required' => false,
                 ],
                 'load_relations' => [
                     'location' => 'query',
