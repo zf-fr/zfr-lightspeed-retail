@@ -267,6 +267,11 @@ return [
                     'type'     => 'string',
                     'required' => false,
                 ],
+                'manufacturerSku' => [
+                    'location' => 'json',
+                    'type'     => 'string',
+                    'required' => false,
+                ],
                 'Prices' => [
                     'location' => 'json',
                     'type'     => 'object',
@@ -308,6 +313,11 @@ return [
                     'type'     => 'string',
                     'required' => false,
                 ],
+                'manufacturerSku' => [
+                    'location' => 'json',
+                    'type'     => 'string',
+                    'required' => false,
+                ],                
                 'Prices' => [
                     'location' => 'json',
                     'type'     => 'object',
