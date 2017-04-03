@@ -317,7 +317,7 @@ return [
                     'location' => 'json',
                     'type'     => 'string',
                     'required' => false,
-                ],                
+                ],
                 'Prices' => [
                     'location' => 'json',
                     'type'     => 'object',
