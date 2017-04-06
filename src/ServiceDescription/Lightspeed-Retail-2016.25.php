@@ -142,6 +142,11 @@ return [
                     'type'     => 'object',
                     'required' => false,
                 ],
+                'CustomFieldValues' => [
+                    'location' => 'json',
+                    'type'     => 'object',
+                    'required' => false,
+                ],
             ],
         ],
 
@@ -179,6 +184,11 @@ return [
                     'required' => false,
                 ],
                 'Contact' => [
+                    'location' => 'json',
+                    'type'     => 'object',
+                    'required' => false,
+                ],
+                'CustomFieldValues' => [
                     'location' => 'json',
                     'type'     => 'object',
                     'required' => false,
@@ -262,6 +272,11 @@ return [
                     'type'     => 'string',
                     'required' => false,
                 ],
+                'ean' => [
+                    'location' => 'json',
+                    'type'     => 'string',
+                    'required' => false,
+                ],
                 'customSku' => [
                     'location' => 'json',
                     'type'     => 'string',
@@ -304,6 +319,11 @@ return [
                     'required' => false,
                 ],
                 'description' => [
+                    'location' => 'json',
+                    'type'     => 'string',
+                    'required' => false,
+                ],
+                'ean' => [
                     'location' => 'json',
                     'type'     => 'string',
                     'required' => false,
