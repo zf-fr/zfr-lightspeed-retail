@@ -451,7 +451,7 @@ return [
             'uri'           => 'Account/{accountID}/SaleLine/{saleLineID}.json',
             'responseModel' => 'GenericModel',
             'data'          => [
-                'root_key' => 'Sale',
+                'root_key' => 'SaleLine',
             ],
             'parameters' => [
                 'accountID' => [
