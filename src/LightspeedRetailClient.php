@@ -167,14 +167,13 @@ class LightspeedRetailClient
         $command['offset'] = 0;
 
         do {
-            $result = $this->serviceClient->execute($command);
+            $result = $this->serviceClient->execute(clone $command);
 
             foreach ($result as $item) {
                 yield $item;
             }
 
-            // Create command to next page
-            $command           = clone $command;
+            // Move to next page
             $command['offset'] += 100;
         } while (count($result) >= 100);
     }
