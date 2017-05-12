@@ -96,11 +96,13 @@ class LightspeedRetailClient
             );
         }
 
-        $handlerStack = HandlerStack::create();
+        $handlerStack  = HandlerStack::create();
+        $retryStrategy = new RetryStrategy($config['max_retries'] ?? 10);
 
         // Push middleware to retry requests when decided by RetryDecider
         $handlerStack->push(Middleware::retry(
-            new RetryDecider($config['max_retries'] ?? 10)
+            [$retryStrategy, 'decide'],
+            [$retryStrategy, 'delay']
         ));
 
         $httpClient   = new Client(['handler' => $handlerStack]);
@@ -165,14 +167,13 @@ class LightspeedRetailClient
         $command['offset'] = 0;
 
         do {
-            $result = $this->serviceClient->execute($command);
+            $result = $this->serviceClient->execute(clone $command);
 
             foreach ($result as $item) {
                 yield $item;
             }
 
-            // Create command to next page
-            $command           = clone $command;
+            // Move to next page
             $command['offset'] += 100;
         } while (count($result) >= 100);
     }
