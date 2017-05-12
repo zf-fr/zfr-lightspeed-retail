@@ -96,11 +96,13 @@ class LightspeedRetailClient
             );
         }
 
-        $handlerStack = HandlerStack::create();
+        $handlerStack  = HandlerStack::create();
+        $retryStrategy = new RetryStrategy($config['max_retries'] ?? 10);
 
         // Push middleware to retry requests when decided by RetryDecider
         $handlerStack->push(Middleware::retry(
-            new RetryDecider($config['max_retries'] ?? 10)
+            [$retryStrategy, 'decide'],
+            [$retryStrategy, 'delay']
         ));
 
         $httpClient   = new Client(['handler' => $handlerStack]);

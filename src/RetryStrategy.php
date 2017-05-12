@@ -27,7 +27,7 @@ use Psr\Http\Message\ResponseInterface;
  * @author Daniel Gimenes
  * @author Michaël Gallego
  */
-class RetryDecider
+class RetryStrategy
 {
     /**
      * The max number of retries we should do before failing
@@ -54,7 +54,7 @@ class RetryDecider
      *
      * @return bool
      */
-    public function __invoke(
+    public function decide(
         int $retries,
         RequestInterface $request,
         ResponseInterface $response = null,
@@ -76,5 +76,34 @@ class RetryDecider
         }
 
         return false;
+    }
+
+    /**
+     * @param int                    $retries
+     * @param ResponseInterface|null $response
+     *
+     * @return int
+     */
+    public function delay(int $retries, ResponseInterface $response = null): int
+    {
+        if (null === $response || ! $response->hasHeader('X-LS-API-Bucket-Level')) {
+            return 0;
+        }
+
+        $header     = $response->getHeaderLine('X-LS-API-Bucket-Level');
+        $parts      = explode('/', $header);
+        $usedUnits  = (int) reset($parts);
+        $bucketSize = (int) end($parts);
+
+        if (0 === $bucketSize) {
+            return 0;
+        }
+
+        $dripRate = $bucketSize / 60;
+
+        // We need 10 units for POST and PUT requests
+        $neededUnits = 10 - ($bucketSize - $usedUnits);
+
+        return $neededUnits / $dripRate * 1000;
     }
 }
