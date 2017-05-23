@@ -52,7 +52,7 @@ final class RetryStrategyTest extends TestCase
     ) {
         $this->assertSame(
             $shouldRetry,
-            (new RetryStrategy(10))->decide($retries, $request, $response, $exception)
+            (new RetryStrategy(10))($retries, $request, $response, $exception)
         );
     }
 
@@ -76,33 +76,5 @@ final class RetryStrategyTest extends TestCase
 
         // Other exception
         yield [false, 1, $request, null, new ClientException('Boom!', $request)];
-    }
-
-    public function testZeroDelayIfNoResponse()
-    {
-        $this->assertSame(0, (new RetryStrategy(10))->delay(1));
-    }
-
-    public function testZeroDelayIfResponseWithoutHeader()
-    {
-        $this->assertSame(0, (new RetryStrategy(10))->delay(1, new Response()));
-    }
-
-    public function testZeroDelayIfCantDetermineTheBucketSize()
-    {
-        $this->assertSame(0, (new RetryStrategy(10))->delay(
-            1,
-            (new Response())->withHeader('X-LS-API-Bucket-Level', 'Invalid')
-        ));
-    }
-
-    public function testCalculatesDelayBasedOnResponseHeader()
-    {
-        // We used 55 of 60, and we need 10, so we should wait for 5 more units.
-        // Since the drip rate is 1 unit per second, we should wait 5 seconds
-        $this->assertSame(5000, (new RetryStrategy(10))->delay(
-            1,
-            (new Response())->withHeader('X-LS-API-Bucket-Level', '55/60')
-        ));
     }
 }
