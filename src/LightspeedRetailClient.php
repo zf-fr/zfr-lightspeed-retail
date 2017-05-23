@@ -96,14 +96,13 @@ class LightspeedRetailClient
             );
         }
 
-        $handlerStack  = HandlerStack::create();
-        $retryStrategy = new RetryStrategy($config['max_retries'] ?? 10);
+        $handlerStack = HandlerStack::create();
 
-        // Push middleware to retry requests when decided by RetryDecider
-        $handlerStack->push(Middleware::retry(
-            [$retryStrategy, 'decide'],
-            [$retryStrategy, 'delay']
-        ));
+        // HTTP Middleware that avoids throttling
+        $handlerStack->push(LeakyBucketMiddleware::wrapped());
+
+        // HTTP Middleware that retries requests according to our retry strategy
+        $handlerStack->push(Middleware::retry(new RetryStrategy($config['max_retries'] ?? 10)));
 
         $httpClient   = new Client(['handler' => $handlerStack]);
         $description  = new Description(require __DIR__ . '/ServiceDescription/Lightspeed-Retail-2016.25.php');
@@ -117,7 +116,7 @@ class LightspeedRetailClient
 
         $serviceClient = new GuzzleClient($httpClient, $description, null, $deserializer, null, $clientConfig);
 
-        // Push middleware to authorize requests
+        // Command Middleware that handles authorization
         $serviceClient->getHandlerStack()->push(AuthorizationMiddleware::wrapped(
             $credentialStorage,
             $httpClient,
